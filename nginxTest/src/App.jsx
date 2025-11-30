@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 // Change this if your backend runs on a different host/port
-const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_BASE || "";
 
 function App() {
   const [message, setMessage] = useState("กำลังโหลดจาก API...");
@@ -65,7 +65,7 @@ function App() {
           onChange={(e) => setAge(e.target.value)}
           placeholder="อายุ"
         />
-        <button type="submit">ส่ง</button>
+        <button type="submit">Send</button>
       </form>
 
       {submittedMsg && <p style={{ color: "lime" }}>{submittedMsg}</p>}
