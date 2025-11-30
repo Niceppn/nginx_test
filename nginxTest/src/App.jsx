@@ -66,6 +66,7 @@ function App() {
           placeholder="อายุ"
         />
         <button type="submit">Send</button>
+        
       </form>
 
       {submittedMsg && <p style={{ color: "lime" }}>{submittedMsg}</p>}
