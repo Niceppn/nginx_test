@@ -22,7 +22,8 @@ app.get('/api/hello', (req, res) => {
 
 // Save an age
 app.post('/api/age', async (req, res) => {
-	const { age } = req.body;
+	const { age, name } = req.body;
+
 	if (age === undefined || age === null) {
 		return res.status(400).json({ error: 'age is required' });
 	}
@@ -31,8 +32,10 @@ app.post('/api/age', async (req, res) => {
 		return res.status(400).json({ error: 'age must be a number' });
 	}
 
+	const safeName = name !== undefined && name !== null ? String(name).trim() : undefined;
+
 	try {
-		const doc = await Age.create({ age: numericAge });
+		const doc = await Age.create({ age: numericAge, name: safeName });
 		return res.json({ message: 'Saved', data: doc });
 	} catch (err) {
 		console.error(err);

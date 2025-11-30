@@ -7,6 +7,7 @@ function App() {
   const [message, setMessage] = useState("กำลังโหลดจาก API...");
   const [error, setError] = useState(null);
   const [age, setAge] = useState("");
+  const [name, setName] = useState("");
   const [submittedMsg, setSubmittedMsg] = useState(null);
   const [ages, setAges] = useState([]);
 
@@ -36,13 +37,14 @@ function App() {
       const res = await fetch(`${API_BASE}/api/age`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ age }),
+        body: JSON.stringify({ age, name }),
       });
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || "Server error");
 
-      setSubmittedMsg(`บันทึกแล้ว: อายุ ${body.data.age} (id: ${body.data._id})`);
+      setSubmittedMsg(`บันทึกแล้ว: ${body.data.name ? body.data.name + ' — ' : ''}อายุ ${body.data.age} (id: ${body.data._id})`);
       setAge("");
+      setName("");
 
       // refresh list
       const listRes = await fetch(`${API_BASE}/api/ages`);
@@ -56,9 +58,15 @@ function App() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-      <h1>กรอกอายุของคุณ</h1>
+      <h1>please enter your age</h1>
 
       <form onSubmit={handleSubmit} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+        <input
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="ชื่อ (ไม่บังคับ)"
+        />
         <input
           type="text"
           value={age}
@@ -66,7 +74,7 @@ function App() {
           placeholder="อายุ"
         />
         <button type="submit">Send</button>
-        
+
       </form>
 
       {submittedMsg && <p style={{ color: "lime" }}>{submittedMsg}</p>}
@@ -79,7 +87,7 @@ function App() {
           {ages.length === 0 && <li>ยังไม่มีข้อมูล</li>}
           {ages.map((a) => (
             <li key={a._id}>
-              {new Date(a.createdAt).toLocaleString()} — อายุ: {a.age}
+              {new Date(a.createdAt).toLocaleString()} — {a.name ? `${a.name} — ` : ''}อายุ: {a.age}
             </li>
           ))}
         </ul>
